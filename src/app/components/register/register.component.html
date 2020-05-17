@@ -1,0 +1,196 @@
+ <form name="registerForm" #registerForm="ngForm" (ngSubmit)="registerUser(registerForm.valid)" novalidate>
+    <!-- start header .. -->
+    <div class="modal-header">
+        <h4 class="modal-title">{{ "registrationTitle" | translate }}</h4>
+        <button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+    </div>
+
+    <!-- start body -->
+    <div class="modal-body">
+        <!-- Enter Email  -->
+        <div class="form-group" [class.has-danger]="email.errors && (email.dirty || registerForm.submitted)">
+          <label for="email" class="form-control-label">{{'emailAddressLabel' | translate}}</label>
+          <input type="email"
+                 name="email"
+                 class="form-control"
+                 id="email"
+                 pattern="^[^\s@]+@[^\s@]+\.[^\s@]+$"
+                 placeholder="{{'enterEmail' | translate}}"
+                 [(ngModel)]="userData.email"
+                 #email="ngModel"
+                 required>
+          <div *ngIf="email.errors && (email.dirty || registerForm.submitted)">
+              <div [hidden]="!email.errors.pattern" class="form-control-feedback">
+                  Invalid e-mail address format!
+              </div>
+              <div [hidden]="!email.errors.required" class="form-control-feedback">
+                  Please provide an e-mail address!
+              </div>
+              <div [hidden]="!emailExists.value" class="form-control-feedback">
+                User Already Exists !!
+            </div>
+          </div>
+      </div>
+      <!-- Enter password  -->
+      <div class="form-group" [class.has-danger]="password.errors && (password.dirty || registerForm.submitted)">
+        <label for="password" class="form-control-label">{{'password' | translate}} :</label>
+        <input type="password"
+               name="password"
+               class="form-control"
+               id="password"
+               minlength="5"
+               maxlength="50"
+               placeholder="{{'enterPassword' | translate}}"
+               [(ngModel)]="userData.password"
+               validateEqual="repeatedPassword"
+               reverse="true"
+               #password="ngModel"
+               required>
+        <div *ngIf="password.errors && (password.dirty || registerForm.submitted)">
+            <div [hidden]="!password.errors.required" class="form-control-feedback">
+                Please provide your password!
+            </div>
+            <div [hidden]="!password.errors.minlength" class="form-control-feedback">
+                Password must be at least 5 characters long!
+            </div>
+            <div [hidden]="!password.errors.maxlength" class="form-control-feedback">
+                Password cannot be longer than 50 characters!
+            </div>
+        </div>
+    </div>
+
+    <!-- Enter Repeat Password  -->
+    <div class="form-group"
+             [class.has-danger]="repeatedPassword.errors && (repeatedPassword.dirty || registerForm.submitted)">
+            <label for="repeatedPassword" class="form-control-label">{{'repeatPassword' | translate}} :</label>
+            <input type="password"
+                   name="repeatedPassword"
+                   class="form-control"
+                   id="repeatedPassword"
+                   placeholder="{{'repeatPassword' | translate}}"
+                   maxlength="50"
+                   [ngModel]="repeatedPassword.value"
+                   validateEqual="password"
+                   #repeatedPassword="ngModel"
+                   required>
+            <div *ngIf="repeatedPassword.errors && (repeatedPassword.dirty || registerForm.submitted)">
+                <div [hidden]="!repeatedPassword.errors.validateEqual" class="form-control-feedback">
+                    Repeated password is not the same!
+                </div>
+                <div [hidden]="!repeatedPassword.errors.maxlength" class="form-control-feedback">
+                    Password cannot be longer than 50 characters!
+                </div>
+            </div>
+        </div>
+
+        <!-- Enter First Name  -->
+        <div class="form-group"
+             [class.has-danger]="firstName.errors && (firstName.dirty || registerForm.submitted)">
+            <label for="firstName" class="form-control-label">{{'firstName' | translate}} :</label>
+            <input type="text"
+                   name="firstName"
+                   class="form-control"
+                   id="firstName"
+                   placeholder="{{'firstName' | translate}}"
+                   [(ngModel)]="userData.firstName"
+                   maxlength="100"
+                   #firstName="ngModel"
+                   required>
+            <div *ngIf="firstName.errors && (firstName.dirty || registerForm.submitted)">
+                <div [hidden]="!firstName.errors.required" class="form-control-feedback">
+                    Field is required!
+                </div>
+                <div [hidden]="!firstName.errors.maxlength" class="form-control-feedback">
+                    First name cannot be longer than 100 characters!
+                </div>
+            </div>
+        </div>
+
+        <!-- Enter Last Name .. -->
+        <div class="form-group"
+             [class.has-danger]="lastName.errors && (lastName.dirty || registerForm.submitted)">
+            <label for="lastName" class="form-control-label">{{'lastName' | translate}} :</label>
+            <input type="text"
+                   name="lastName"
+                   class="form-control"
+                   id="lastName"
+                   placeholder="{{'lastName' | translate}}"
+                   [(ngModel)]="userData.lastName"
+                   maxlength="100"
+                   #lastName="ngModel"
+                   required>
+            <div *ngIf="lastName.errors && (lastName.dirty || registerForm.submitted)">
+                <div [hidden]="!lastName.errors.required" class="form-control-feedback">
+                    Field is required!
+                </div>
+                <div [hidden]="!lastName.errors.maxlength" class="form-control-feedback">
+                    Last name cannot be longer than 100 characters!
+                </div>
+            </div>
+        </div>
+
+        <!-- Enter Phone Number .. -->
+        <div class="form-group"
+             [class.has-danger]="phoneNumber.errors && (phoneNumber.dirty || registerForm.submitted)">
+            <label for="phoneNumber" class="form-control-label">{{'phoneNumber' | translate}} :</label>
+            <input type="text"
+                   name="phoneNumber"
+                   class="form-control"
+                   id="phoneNumber"
+                   placeholder="{{'phoneNumber' | translate}}"
+                   [(ngModel)]="userData.phoneNumber"
+                   pattern="\d{9,11}"
+                   #phoneNumber="ngModel"
+                   required>
+            <div *ngIf="phoneNumber.errors && (phoneNumber.dirty || registerForm.submitted)">
+                <div [hidden]="!phoneNumber.errors.required" class="form-control-feedback">
+                    Field is required!
+                </div>
+                <div [hidden]="!phoneNumber.errors.pattern" class="form-control-feedback">
+                    Invalid phone number!
+                </div>
+            </div>
+        </div>
+
+    <!-- Enter captcha -->
+      <div class="col-xs-9">
+      <img class="captcha-image" alt="captcha" #captchaImage (click)="refreshCaptcha()" />
+      </div>
+      <div class="col-md-3 form-group"
+           [class.has-danger]="captcha.errors && (captcha.dirty || registerForm.submitted)">
+          <label for="captcha" class="form-control-label">{{'captchaText' | translate}}</label>
+          <input type="text"
+                 name="captcha"
+                 class="form-control"
+                 id="captcha"
+                 placeholder="{{'captchaText' | translate}}"
+                 [(ngModel)]="userData.captcha.captcha"
+                 #captcha="ngModel"
+                 maxlength="6"
+                 autocomplete="off"
+                 required>
+          <div *ngIf="captcha.errors && (captcha.dirty || registerForm.submitted)">
+              <div [hidden]="!captcha.errors.required" class="form-control-feedback">
+                  Add a valid Captcha
+              </div>
+          </div>
+          
+      </div>
+  </div>
+        <!-- end of body -->
+  
+    <ngx-spinner bdColor="rgba(51, 51, 51, 0.8)" size="default" type="ball-spin-clockwise">  
+          <p style="color: white">Please Wait. </p>  
+    </ngx-spinner>
+    <!-- Footer -->
+    <div class="modal-footer">
+        <button type="submit" class="btn btn-success">
+      {{ "registerMeButton" | translate }}
+    </button>
+        <button type="button" class="btn btn-danger" (click)="activeModal.close()">
+      {{ "cancelButton" | translate }}
+    </button>
+    </div>
+</form>
